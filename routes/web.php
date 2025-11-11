@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Users;
 use Livewire\Volt\Volt;
 use App\Livewire\Counter;
 use Laravel\Fortify\Features;
@@ -10,6 +11,8 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/counter', Counter::class);
+
+Route::get('/users', Users::class);
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
