@@ -12,7 +12,9 @@ Route::get('/', function () {
 
 Route::get('/counter', Counter::class);
 
-Route::get('/users', Users::class);
+Route::get('/users', function () {
+    return view('users');
+});
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
