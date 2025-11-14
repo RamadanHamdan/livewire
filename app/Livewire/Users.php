@@ -8,10 +8,13 @@ use Livewire\Component;
 use Livewire\Attributes\Validate;
 use Illuminate\Support\Facades\Hash;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
 
 class Users extends Component
 {
-    use WithFileUploads;
+    use WithFileUploads, WithPagination;
+
+    public $query = '';
 
     #[Validate('required|string|min:3')]
     public $name = '';
@@ -25,9 +28,19 @@ class Users extends Component
     #[Validate('image|max:1000')]
     public $avatar;
 
+    public function updatedQuery()
+    {
+        $this->resetPage();
+    }
+
+    public function search()
+    {
+        $this->resetPage();
+    }
+
     public function createNewUser()
     {
-        sleep(3); // Simulate a delay for demonstration purposes
+        sleep(1); // Simulate a delay for demonstration purposes
         $validated = $this->validate();
 
         if ($this->avatar) {
@@ -50,7 +63,9 @@ class Users extends Component
     {
         return view('livewire.users', [
             'title' => 'User Page',
-            'users' => User::all()
+            'users' => User::latest()
+                ->where('name', 'like', "%{$this->query}%")
+                ->paginate(6),
         ]);
     }
 }
